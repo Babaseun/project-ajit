@@ -12,10 +12,10 @@ import NavigationMenu from '../NavigationMenu/NavigationMenu';
 import Hamburger from '../Hamburger/Hamburger';
 import SideBar from '../SideBar/SideBar';
 import axios from 'axios';
-import dotenv from 'dotenv';
+
 import { Image } from 'cloudinary-react';
 import { Link } from 'react-router-dom';
-dotenv.config();
+require('dotenv').config({path: __dirname + '/../.env'});
 const MainMap = () => {
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -93,7 +93,7 @@ const MainMap = () => {
   />;
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.APP_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
   if (loadError) return 'Error loading maps';
@@ -138,12 +138,7 @@ const MainMap = () => {
                     onClick={() => {
                       setSelected(marker);
                     }}
-                    // icon={{
-                    //   url: data,
-                    //   scaledSize: new window.google.maps.Size(30, 30),
-                    //   origin: new window.google.maps.Point(0, 0),
-                    //   anchor: new window.google.maps.Point(15, 15),
-                    // }}
+                   
                   />
                 ))
               : null}
