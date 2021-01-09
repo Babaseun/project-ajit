@@ -1,0 +1,25 @@
+.login__container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__container > div {
+  flex: 1 1 0px;
+}
+.login__image {
+  width: 100%;
+}
+
+.login-input-group {
+  padding-left: 30px;
+}
+.login-input {
+  width: 70%;
+  margin: 0 auto;
+}
+.login__text {
+  margin-bottom: 50px;
+}
+@import './inputField-style';

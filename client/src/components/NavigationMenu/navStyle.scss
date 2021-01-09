@@ -1,0 +1,35 @@
+.navigation {
+  min-height: 100vh;
+  background: lime;
+  width: 500px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.display {
+  display: none;
+}
+.icons {
+  font-size: 2rem;
+}
+.navigation__columns {
+  width: 90%;
+  margin: 30px auto;
+}
+.navigation__info {
+  display: flex;
+  align-items: center;
+}
+
+.fa-user {
+  margin-right: 20px;
+  padding: 20px;
+  background: green;
+  border-radius: 50%;
+}
+.nav-item {
+  padding: 10px;
+}

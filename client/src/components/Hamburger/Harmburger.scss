@@ -1,0 +1,15 @@
+.fa-bars {
+  font-size: 3rem;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  right: 0;
+  z-index: 2;
+  background: green;
+  padding: 20px;
+  width: 85px;
+  border-radius: 50%;
+}
+.display {
+  display: none;
+}

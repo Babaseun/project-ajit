@@ -1,0 +1,33 @@
+.map {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+.map__item {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.map__item > * {
+  // border: 1px solid blue;
+}
+.map__columns:nth-child(2) {
+  width: 100%;
+  height: 100%;
+}
+.map__first-item--brand {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: lime;
+  color: white;
+}
+.map__second-item--links {
+  padding: 20px;
+}

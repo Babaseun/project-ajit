@@ -1,0 +1,72 @@
+.payment {
+  height: 100vh;
+  width: 100vw;
+  background: #dee3de;
+  border: 1px solid red;
+  margin: auto;
+}
+.payment__columns:nth-child(1) {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 20px;
+  i {
+    margin-right: 20px;
+  }
+}
+
+.payment__columns:nth-child(2) {
+  margin: 30px auto;
+}
+
+.payment__column {
+  background-color: #3bb78f;
+  background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+  min-height: 200px;
+  width: 90%;
+  margin: auto;
+  border-radius: 2%;
+  margin-bottom: 40px;
+  h3 {
+    padding: 30px;
+  }
+}
+.payment-icons {
+  color: #0bda51;
+}
+.payment__data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  h1 {
+    margin-left: 60px;
+  }
+}
+
+.card-arrow {
+  margin-right: 20px;
+}
+.payment-button {
+  margin-left: 30px;
+}
+
+.payment-text {
+  padding: 10px;
+  margin-left: 20px;
+}
+.payment-left-icon {
+  margin-left: 20px;
+}
+.payment-right-icon {
+  margin-right: 20px;
+}
+.payment-process {
+  border-top: 1px solid gainsboro;
+  background: white;
+}
+.payment-process:last-child {
+  border-bottom: 1px solid gainsboro;
+  background: white;
+  padding: 10px;
+}
