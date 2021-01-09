@@ -9,10 +9,7 @@ import Auth from '../middlewares/auth';
 export const userRouter = Router();
 const userService = new UserService();
 
-userRouter.post(
-  '/register',
-  userRules['forRegister'],
-  (req: Request, res: Response) => {
+userRouter.post('/register', userRules['forRegister'], (req: Request, res: Response) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) return res.status(422).json(errors.array());
@@ -24,10 +21,7 @@ userRouter.post(
   }
 );
 
-userRouter.post(
-  '/login',
-  userRules['forLogin'],
-  (req: Request, res: Response) => {
+userRouter.post('/login', userRules['forLogin'], (req: Request, res: Response) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) return res.status(422).json(errors.array());

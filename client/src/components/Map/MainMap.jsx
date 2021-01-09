@@ -12,7 +12,10 @@ import NavigationMenu from '../NavigationMenu/NavigationMenu';
 import Hamburger from '../Hamburger/Hamburger';
 import SideBar from '../SideBar/SideBar';
 import axios from 'axios';
+import dotenv from 'dotenv';
 import { Image } from 'cloudinary-react';
+import { Link } from 'react-router-dom';
+dotenv.config();
 const MainMap = () => {
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -53,7 +56,10 @@ const MainMap = () => {
     });
     returnImageIds();
   }, [role, history]);
-
+  const logout = () => {
+    localStorage.removeItem('x-access-token');
+    history.push('/login');
+  };
   const onMapClick = React.useCallback((e) => {
     setMarkers((current) => [
       ...current,
@@ -155,6 +161,15 @@ const MainMap = () => {
             ) : null}
           </GoogleMap>
         </div>
+        {localStorage.getItem('x-access-token') ? (
+          <button
+            style={{ position: 'absolute', top: '0', left: '80%' }}
+            onClick={logout}
+            className="btn btn-primary"
+          >
+            Logout
+          </button>
+        ) : null}
       </div>
     </div>
   );

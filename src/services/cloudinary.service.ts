@@ -1,6 +1,6 @@
 import { cloudinary } from '../utils/cloudinary';
 
-export class UploadService {
+export class CloudinaryService {
   async upload(fileStr: string, imgID: string) {
     try {
       const uploadResponse = await cloudinary.uploader.upload(fileStr, {

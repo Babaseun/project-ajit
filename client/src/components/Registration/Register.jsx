@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import '../Login/login-style.scss';
 import Auth from '../../Auth';
@@ -150,6 +150,9 @@ function Register() {
             <button className="btn btn-success" type="submit">
               Register
             </button>
+            <small className="text-muted m-4">
+              Already registered <Link to="/login">Click Here to login</Link>
+            </small>
           </form>
         </div>
       </div>

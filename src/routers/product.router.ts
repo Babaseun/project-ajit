@@ -9,11 +9,7 @@ import { ProductAttributes } from '../models/product';
 export const productRouter = Router();
 const productService = new ProductService();
 
-productRouter.post(
-  '/api/products',
-  productRules['forAddProduct'],
-  Auth.verifyToken,
-  (req: Request, res: Response) => {
+productRouter.post('/api/products', productRules['forAddProduct'], Auth.verifyToken, (req: Request, res: Response) => {
     const errors = validationResult(req.body);
 
     if (!errors.isEmpty()) return res.status(422).json(errors.array());
@@ -26,10 +22,7 @@ productRouter.post(
   }
 );
 
-productRouter.get(
-  '/api/products',
-  Auth.verifyToken,
-  (req: Request, res: Response) => {
+productRouter.get('/api/products', Auth.verifyToken, (req: Request, res: Response) => {
     const { id } = res.locals.user;
 
     const products = productService.getAllProducts(id);

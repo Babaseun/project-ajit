@@ -17,12 +17,7 @@ export class UserService {
 
     const hash = Helper.hashPassword(password);
 
-    const { id } = await User.create({
-      ...results,
-      password: hash,
-      isAuthenticated: true,
-      role: role.toLowerCase(),
-    });
+    const { id } = await User.create({ ...results, password: hash, isAuthenticated: true, role: role.toLowerCase(),});
 
     const token = Helper.generateToken(id);
     return { token };

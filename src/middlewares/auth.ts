@@ -15,16 +15,11 @@ const Auth = {
         where: { id: decoded['id'], isAuthenticated: true },
       });
       if (!user)
-        return res
-          .status(400)
-          .send({ message: 'The token you provided is invalid' });
+        return res.status(400).send({ message: 'The token you provided is invalid' });
       res.locals.user = decoded;
       next();
     } catch (error) {
-      return res.status(401).send({
-        message: 'Invalid auth token provided or user unauthorized!',
-        error,
-      });
+      return res.status(401).send({message: 'Invalid auth token provided or user unauthorized!', error,});
     }
   },
 };

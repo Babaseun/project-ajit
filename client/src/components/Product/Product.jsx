@@ -10,11 +10,15 @@ function Product() {
   const { register, handleSubmit, errors } = useForm();
   const [errs, setErrors] = React.useState([]);
   const [role, setRole] = React.useState('');
-
+  const [successMsg, setMsg] = React.useState('');
+  const logout = () => {
+    localStorage.removeItem('x-access-token');
+    history.push('/login');
+  };
   const onSubmitProduct = async (data) => {
     const imageID = uuid();
     const productID = uuid();
-
+    setMsg('');
     const config = {
       headers: {
         'x-access-token': localStorage.getItem('x-access-token'),
@@ -30,7 +34,6 @@ function Product() {
     const secondResult = await axios.post(
       'http://localhost:4001/api/coords',
       { coords: { lng, lat, imageId: imageID, productId: productID } },
-
       config
     );
     base64Img.forEach(async (img) => {
@@ -45,7 +48,10 @@ function Product() {
       console.log(thirdResult);
     });
     Promise.all([firstResult, secondResult])
-      .then((res) => console.log(res))
+      .then((res) => {
+        setMsg('Saved successfully');
+        console.log(res);
+      })
       .catch((err) => console.log(err.response));
   };
 
@@ -88,6 +94,8 @@ function Product() {
       <div className="login-input-group">
         <div className="login-input">
           <h1 className="login__text">Add Product</h1>
+          {successMsg}
+
           {errs ? (
             <ul>
               {errs.map((err, index) => (
@@ -177,6 +185,13 @@ function Product() {
             <button className="btn btn-success" type="submit">
               Save Product
             </button>
+            <div className="input-field mt-3">
+              <div className="form-group">
+                <button className="btn" onClick={logout}>
+                  Logout
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>

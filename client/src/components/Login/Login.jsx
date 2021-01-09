@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import './login-style.scss';
 import Auth from '../../Auth';
 import axios from 'axios';
-
+import { Link } from 'react-router-dom';
 function Login() {
   const history = useHistory();
   const { register, handleSubmit, errors } = useForm();
@@ -74,6 +74,10 @@ function Login() {
             <button className="btn btn-success" type="submit">
               Login
             </button>
+            <small className="text-muted m-4">
+              Not yet registered{' '}
+              <Link to="/register">Click Here to register</Link>
+            </small>
           </form>
         </div>
       </div>
