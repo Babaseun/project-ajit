@@ -6,6 +6,7 @@ export interface ProductAttributes {
   description: string;
   price: number;
   owner_id: string;
+  image_id: string;
 }
 export interface ProductCreationAttributes
   extends Sequelize.Optional<ProductAttributes, 'id'> {}
@@ -16,8 +17,8 @@ export class Product
   public id!: string;
   public description!: string;
   public price!: number;
+  public image_id!: string;
   public owner_id!: string;
-
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -37,6 +38,10 @@ Product.init(
       allowNull: false,
     },
     owner_id: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    image_id: {
       type: Sequelize.STRING,
       allowNull: false,
     },

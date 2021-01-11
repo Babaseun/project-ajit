@@ -3,10 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import '../Login/login-style.scss';
-import axios from 'axios';
 import Auth from '../../Auth';
+import axios from 'axios';
 
-function Register() {
+function AdminRegister() {
   const history = useHistory();
   const { register, handleSubmit, errors } = useForm();
   const [errs, setErrors] = React.useState([]);
@@ -16,7 +16,7 @@ function Register() {
       const res = await axios.post('/register', data);
       Auth.onAuthenticated();
       localStorage.setItem('x-access-token', res.data.token);
-      history.push('/map');
+      history.push('/products');
       setErrors([]);
     } catch (error) {
       setErrors([...error.response.data]);
@@ -27,7 +27,7 @@ function Register() {
     <div className="login__container">
       <div className="login-input-group">
         <div className="login-input">
-          <h1 className="login__text">Register Here</h1>
+          <h1 className="login__text">Admin Register</h1>
           {errs ? (
             <ul>
               {errs.map((err, index) => (
@@ -109,14 +109,15 @@ function Register() {
               type="hidden"
               name="role"
               className="input form-control"
-              value="customer"
+              value="business"
               ref={register()}
             />
             <button className="btn btn-success" type="submit">
               Register
             </button>
             <small className="text-muted m-4">
-              Already registered <Link to="/login">Click Here to login</Link>
+              Already registered{' '}
+              <Link to="/admin-login">Click Here to login</Link>
             </small>
           </form>
         </div>
@@ -132,4 +133,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default AdminRegister;

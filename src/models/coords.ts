@@ -3,16 +3,20 @@ import { sequelize } from '../instances/sequelize';
 
 export interface CoordinatesAttributes {
   id: number;
-  lat: string;
-  lng: string;
+  lat: number;
+  lng: number;
+  owner_id: string;
+  image_id: string;
 }
 
 export class Coordinates
   extends Sequelize.Model<CoordinatesAttributes>
   implements CoordinatesAttributes {
   public id!: number;
-  public lat!: string;
-  public lng!: string;
+  public lat!: number;
+  public lng!: number;
+  public owner_id!: string;
+  public image_id!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -24,10 +28,18 @@ Coordinates.init(
       autoIncrement: true,
     },
     lat: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
     lng: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    owner_id: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    image_id: {
       type: Sequelize.STRING,
       allowNull: false,
     },

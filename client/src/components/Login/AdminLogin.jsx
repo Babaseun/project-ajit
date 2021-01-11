@@ -5,7 +5,7 @@ import './login-style.scss';
 import Auth from '../../Auth';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-function Login() {
+function AdminLogin() {
   const history = useHistory();
   const { register, handleSubmit, errors } = useForm();
   const [err, setError] = React.useState('');
@@ -16,7 +16,7 @@ function Login() {
       Auth.onAuthenticated();
 
       localStorage.setItem('x-access-token', res.data.token);
-      history.push('/map');
+      history.push('/products');
       setError('');
     } catch (error) {
       const [firstErr] = error.response.data;
@@ -29,7 +29,7 @@ function Login() {
     <div className="login__container">
       <div className="login-input-group">
         <div className="login-input">
-          <h1 className="login__text">Login Here</h1>
+          <h1 className="login__text">ADMIN LOGIN</h1>
           <form onSubmit={handleSubmit(onSubmit)} method="POST">
             <div className="input-field">
               <label>Email</label>
@@ -62,7 +62,7 @@ function Login() {
             </button>
             <small className="text-muted m-4">
               Not yet registered{' '}
-              <Link to="/register">Click Here to register</Link>
+              <Link to="/admin-register">Click Here to register</Link>
             </small>
           </form>
         </div>
@@ -78,4 +78,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default AdminLogin;

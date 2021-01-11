@@ -1,23 +1,23 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useForm } from 'react-hook-form';
 import '../Login/login-style.scss';
 import axios from 'axios';
+import Auth from '../../Auth';
 
 function Product() {
   const history = useHistory();
   const { register, handleSubmit, errors } = useForm();
-  const [errs, setErrors] = React.useState([]);
-  const [role, setRole] = React.useState('');
+  const [errs] = React.useState([]);
   const [successMsg, setMsg] = React.useState('');
+  const [imageID, setImageID] = React.useState(uuid());
+
   const logout = () => {
     localStorage.removeItem('x-access-token');
-    history.push('/login');
+    history.push('/admin-login');
   };
   const onSubmitProduct = async (data) => {
-    const imageID = uuid();
-    const productID = uuid();
     setMsg('');
     const config = {
       headers: {
@@ -25,28 +25,19 @@ function Product() {
       },
     };
     const { productImage, price, description, lng, lat } = data;
-    const base64Img = await convertToBase64(productImage);
+    await getBase64(productImage[0]);
+
     const firstResult = await axios.post(
-      'http://localhost:4001/api/products',
-      { price, description, imageId: imageID },
+      '/api/products',
+      { price, description, image_id: imageID },
       config
     );
     const secondResult = await axios.post(
-      'http://localhost:4001/api/coords',
-      { coords: { lng, lat, imageId: imageID, productId: productID } },
+      '/api/coords',
+      { lng: Number(lng), lat: Number(lat), image_id: imageID },
       config
     );
-    base64Img.forEach(async (img) => {
-      const thirdResult = await axios.post(
-        'http://localhost:4001/api/upload',
-        {
-          file: img,
-          imageId: imageID,
-        },
-        config
-      );
-      console.log(thirdResult);
-    });
+
     Promise.all([firstResult, secondResult])
       .then((res) => {
         setMsg('Saved successfully');
@@ -56,39 +47,29 @@ function Product() {
   };
 
   const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      uploadImage(reader.result);
+    };
   };
-  const convertToBase64 = async (files) => {
-    const results = [];
-    for (let i = 0; i < files.length; i++) {
-      const data = await getBase64(files[i]);
-      results.push(data);
-    }
-    return results;
-  };
-  useEffect(() => {
+  const uploadImage = async (base64String) => {
     const config = {
       headers: {
         'x-access-token': localStorage.getItem('x-access-token'),
       },
     };
-    axios
-      .get('http://localhost:4001/api/user', config)
-      .then((res) => {
-        setRole(res.data.role);
-        if (role === undefined && role === 'customer') {
-          history.push('/');
-        }
-      })
-      .catch((err) => {
-        if (err) history.push('/register');
-      });
-  }, [history, role]);
+    await axios.post(
+      '/api/upload',
+      {
+        file: base64String,
+        image_id: imageID,
+      },
+      config
+    );
+    setImageID(uuid());
+  };
+  console.log(Auth.getLoggedInStatus());
   return (
     <div className="login__container">
       <div className="login-input-group">
@@ -112,7 +93,6 @@ function Product() {
                   name="productImage"
                   className="form-control-file"
                   ref={register({ required: true })}
-                  multiple
                 />
                 {errors.productImage && (
                   <div className="text-danger">

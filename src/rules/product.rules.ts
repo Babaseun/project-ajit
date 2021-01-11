@@ -7,6 +7,6 @@ export const productRules = {
       .isEmpty()
       .withMessage('description field is required'),
     check('price').not().isEmpty().withMessage('price field is required'),
-    check('imageId').not().isEmpty().withMessage('imageId field is required'),
+    check('image_id').not().isEmpty().withMessage('imageId field is required'),
   ],
 };

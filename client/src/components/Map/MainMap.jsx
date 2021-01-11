@@ -13,63 +13,75 @@ import Hamburger from '../Hamburger/Hamburger';
 import SideBar from '../SideBar/SideBar';
 import axios from 'axios';
 
-import { Image } from 'cloudinary-react';
-import { Link } from 'react-router-dom';
-require('dotenv').config({path: __dirname + '/../.env'});
+require('dotenv').config({ path: __dirname + '/../.env' });
 const MainMap = () => {
-  const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
   const [navClicked, setNavClicked] = useState(false);
   const [display, setDisplay] = useState('');
-  const [role, setRole] = useState('');
-  const [imageIDs, setImageIDs] = useState();
+  const [imageData, setImageData] = useState([]);
+
   const history = useHistory();
 
-  const returnImageIds = async () => {
-    const array = [];
-    const imgIDS = await axios.get('/api/images');
-    console.log();
-    setImageIDs(imgIDS.data);
-    const secondResult = await axios.get('/api/coords');
+  const returnImageUrls = async () => {
+    const config = {
+      headers: {
+        'x-access-token': localStorage.getItem('x-access-token'),
+      },
+    };
+    const images = await axios.get('/api/images');
+    const coords = await axios.get('/api/coords');
+    const products = await axios.get('/api/products', config);
+
+    Promise.all([images, coords, products]).then((res) => {
+      const imgUrls = res[0].data;
+      const coordinates = res[1].data;
+      const productData = res[2].data;
+
+      const map = new Map();
+
+      for (let i of imgUrls) {
+        const key = [i['publicIds']].toString().slice(4);
+
+        map.set(
+          key,
+
+          {
+            imageUrl: i['imageUrls'],
+          }
+        );
+      }
+      for (let i = 0; i < productData.length; i++) {
+        const data = map.get(productData[i]['image_id']);
+        data['description'] = productData[i]['description'];
+        data['price'] = productData[i]['price'];
+      }
+      for (let i = 0; i < coordinates.length; i++) {
+        const data = map.get(coordinates[i]['image_id']);
+        data['lat'] = coordinates[i]['lat'];
+        data['lng'] = coordinates[i]['lng'];
+      }
+      const arrayOfData = [];
+      for (let [key, value] of map.entries()) {
+        arrayOfData.push({ id: key, values: value });
+      }
+
+      setImageData([...arrayOfData]);
+    });
   };
+  console.log(imageData);
 
   const navMenuClicked = () => {
     navClicked ? setNavClicked(false) : setNavClicked(true);
     display === '' ? setDisplay('display') : setDisplay('');
   };
   useEffect(() => {
-    const config = {
-      headers: {
-        'x-access-token': localStorage.getItem('x-access-token'),
-      },
-    };
-    axios.get('/api/user', config).then((res) => {
-      setRole(res.data.role);
-      if (role === 'customer') {
-        history.push('/map');
-      }
-      if (role === 'business') {
-        history.push('/product');
-      } else {
-        history.push('/');
-      }
-    });
-    returnImageIds();
-  }, [role, history]);
+    returnImageUrls();
+  }, []);
   const logout = () => {
     localStorage.removeItem('x-access-token');
     history.push('/login');
   };
-  const onMapClick = React.useCallback((e) => {
-    setMarkers((current) => [
-      ...current,
-      {
-        lat: e.latLng.lat(),
-        lng: e.latLng.lng(),
-        time: new Date(),
-      },
-    ]);
-  }, []);
+
   const libraries = ['places'];
   const mapContainerStyle = {
     height: '100%',
@@ -84,42 +96,22 @@ const MainMap = () => {
     zoomControl: true,
   };
 
-  <Image
-    key={'2'}
-    cloudName="dtof2ye7q"
-    publicId={'dev/9053bc8d-5df0-4993-8765-9387978a8c77'}
-    width={'100'}
-    crop={'scale'}
-  />;
-
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
   if (loadError) return 'Error loading maps';
   if (!isLoaded) return 'Loading maps';
-  console.log(role);
   return (
     <div>
-      {/* {imageIds &&
-        imageIds.map((ids, i) => (
-          <Image
-            key={i}
-            cloudName="dtof2ye7q"
-            publicId={'dev/9053bc8d-5df0-4993-8765-9387978a8c77'}
-            width={'100'}
-            crop={'scale'}
-          />
-        ))} */}
-
       {navClicked ? <NavigationMenu backArrow={navMenuClicked} /> : null}
       <div className="map">
         <div className="map__columns">
           <div className="map__item">
-            {role ? (
+            {Auth.getLoggedInStatus() ? (
               <Hamburger display={display} navMenuClicked={navMenuClicked} />
             ) : null}
-            {role ? null : <SideBar />}
+            {Auth.getLoggedInStatus() ? null : <SideBar />}
           </div>
         </div>
         <div className="map__columns">
@@ -128,30 +120,37 @@ const MainMap = () => {
             zoom={8}
             center={center}
             options={options}
-            onClick={onMapClick}
           >
-            {Auth.getLoggedInStatus()
-              ? markers.map((marker) => (
-                  <Marker
-                    key={marker.time.toISOString()}
-                    position={{ lat: marker.lat, lng: marker.lng }}
-                    onClick={() => {
-                      setSelected(marker);
-                    }}
-                   
-                  />
-                ))
-              : null}
+            {imageData &&
+              imageData.map((marker) => (
+                <Marker
+                  key={marker.id}
+                  position={{
+                    lat: marker.values.lat,
+                    lng: marker.values.lng,
+                  }}
+                  icon={{
+                    url: marker.values.imageUrl,
+                    scaledSize: new window.google.maps.Size(100, 100),
+                    origin: new window.google.maps.Point(0, 0),
+                    anchor: new window.google.maps.Point(15, 15),
+                  }}
+                  onClick={() => setSelected(marker)}
+                />
+              ))}
 
             {selected ? (
               <InfoWindow
                 position={{
-                  lat: Number(selected.lat),
-                  lng: Number(selected.lng),
+                  lat: selected.values.lat,
+                  lng: selected.values.lng,
                 }}
                 onCloseClick={() => setSelected(null)}
               >
-                <div>HI</div>
+                <div>
+                  <h1> Description : {selected.values.description}</h1>
+                  <h1>Price :{selected.values.price}</h1>
+                </div>
               </InfoWindow>
             ) : null}
           </GoogleMap>

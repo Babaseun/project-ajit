@@ -6,7 +6,7 @@ import NavItem from '../NavigationMenu/NavItem/NavItem';
 import './paymentStyle.scss';
 
 function Payment() {
-  const [navItems, setNavItems] = React.useState([...navLinks]);
+  const [navItems] = React.useState([...navLinks]);
   return (
     <div className="payment">
       <div className="payment__columns">

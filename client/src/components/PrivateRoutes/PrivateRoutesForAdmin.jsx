@@ -2,17 +2,17 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Auth from '../../Auth';
 
-const PrivateRoutes = (props) => (
+const PrivateRoutesForAdmin = (props) => (
   <Route
     path={props.path}
     render={(data) =>
       Auth.getLoggedInStatus() ? (
         <props.component {...data}></props.component>
       ) : (
-        <Redirect to={{ pathname: '/login' }} />
+        <Redirect to={{ pathname: '/admin-login' }} />
       )
     }
   />
 );
 
-export default PrivateRoutes;
+export default PrivateRoutesForAdmin;

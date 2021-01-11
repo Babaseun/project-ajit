@@ -2,7 +2,6 @@ import * as Sequelize from 'sequelize';
 import { sequelize } from '../instances/sequelize';
 import { Coordinates } from './coords';
 import { Product } from './product';
-import { Image } from './image';
 
 export interface UserAttributes {
   id: string;
@@ -73,5 +72,4 @@ User.init(
   }
 );
 Product.belongsTo(User, { foreignKey: 'owner_id', onDelete: 'cascade' });
-Product.hasMany(Image);
-Coordinates.hasMany(Image);
+Coordinates.belongsTo(User, { foreignKey: 'owner_id', onDelete: 'cascade' });

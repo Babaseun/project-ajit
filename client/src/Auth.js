@@ -1,5 +1,6 @@
 const Auth = {
-  isLoggedIn: localStorage.getItem('x-access-token'),
+  isLoggedIn: false,
+
   onAuthenticated() {
     this.isLoggedIn = localStorage.getItem('x-access-token');
   },
