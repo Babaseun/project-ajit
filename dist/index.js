@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const user_router_1 = require("./routers/user.router");
+const morgan_1 = __importDefault(require("morgan"));
+const product_router_1 = require("./routers/product.router");
+const cloudinary_router_1 = require("./routers/cloudinary.router");
+const coordinate_router_1 = require("./routers/coordinate.router");
+const path_1 = __importDefault(require("path"));
+const app = express_1.default();
+app.use(cors_1.default());
+app.use(morgan_1.default('dev'));
+app.use(express_1.default.json({ limit: '50mb' }));
+app.use(express_1.default.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express_1.default.static(path_1.default.join(__dirname, '../client/build/')));
+app.use('/', user_router_1.userRouter);
+app.use('/', product_router_1.productRouter);
+app.use('/', cloudinary_router_1.cloudinaryRouter);
+app.use('/', coordinate_router_1.coordinateRouter);
+const PORT = process.env.PORT || 4001;
+app.listen(PORT, () => console.log(`Server is listening on port ${PORT}........`));
