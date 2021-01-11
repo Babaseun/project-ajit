@@ -9,7 +9,7 @@ export class ProductService {
     }
   }
   async getAllProducts(id: string) {
-    const products = await Product.findAll({ where: { owner_id: id } });
+    const products = await Product.findAll();
     return products;
   }
 }
