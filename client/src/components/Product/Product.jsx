@@ -14,7 +14,7 @@ function Product() {
 
   const logout = () => {
     localStorage.removeItem('x-access-token');
-    history.push('/admin-login');
+    history.push('/login');
   };
   const onSubmitProduct = async (data) => {
     setMsg('');
