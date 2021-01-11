@@ -2,7 +2,7 @@ const Auth = {
   isLoggedIn: false,
 
   onAuthenticated() {
-    this.isLoggedIn = localStorage.getItem('x-access-token');
+    this.isLoggedIn = true;
   },
   getLoggedInStatus() {
     return this.isLoggedIn;

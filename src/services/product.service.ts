@@ -8,7 +8,7 @@ export class ProductService {
       console.log(error);
     }
   }
-  async getAllProducts(id: string) {
+  async getAllProducts() {
     const products = await Product.findAll();
     return products;
   }

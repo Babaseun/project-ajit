@@ -4,7 +4,6 @@ import { v4 as uuid } from 'uuid';
 import { useForm } from 'react-hook-form';
 import '../Login/login-style.scss';
 import axios from 'axios';
-import Auth from '../../Auth';
 
 function Product() {
   const history = useHistory();
@@ -69,7 +68,6 @@ function Product() {
     );
     setImageID(uuid());
   };
-  console.log(Auth.getLoggedInStatus());
   return (
     <div className="login__container">
       <div className="login-input-group">

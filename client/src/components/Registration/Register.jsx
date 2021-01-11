@@ -16,8 +16,13 @@ function Register() {
       const res = await axios.post('/register', data);
       Auth.onAuthenticated();
       localStorage.setItem('x-access-token', res.data.token);
-      history.push('/map');
+
       setErrors([]);
+      if (data.role === 'customer') {
+        history.push('/map');
+      } else {
+        history.push('/products');
+      }
     } catch (error) {
       setErrors([...error.response.data]);
     }
@@ -105,13 +110,35 @@ function Register() {
                 {errors.confirmPassword && 'Please enter your password.'}
               </div>
             </div>
-            <input
-              type="hidden"
-              name="role"
-              className="input form-control"
-              value="customer"
-              ref={register()}
-            />
+            <div className="input-field">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="role"
+                  value="customer"
+                  defaultChecked
+                  ref={register()}
+                />
+                <label className="form-check-label">
+                  Are you registering as a customer ?
+                </label>
+              </div>
+              <div className="input-field">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="role"
+                    value="business"
+                    ref={register()}
+                  />
+                  <label className="form-check-label">
+                    Are you registering as a business ?
+                  </label>
+                </div>
+              </div>
+            </div>
             <button className="btn btn-success" type="submit">
               Register
             </button>

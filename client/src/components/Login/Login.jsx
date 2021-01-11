@@ -14,13 +14,28 @@ function Login() {
     try {
       const res = await axios.post('/login', data);
       Auth.onAuthenticated();
-
       localStorage.setItem('x-access-token', res.data.token);
-      history.push('/map');
       setError('');
+      if (data.role === 'customer') {
+        history.push('/map');
+      }
+      const key = localStorage.getItem('x-access-token');
+      axios
+        .get('/api/user', {
+          headers: {
+            'x-access-token': key,
+          },
+        })
+        .then((user) => {
+          if(user.data.role === "customer"){
+            setError('You are not authorized to login');
+          }else{
+            setError('');
+            history.push("/products")
+          }
+        })
     } catch (error) {
       const [firstErr] = error.response.data;
-      console.log(firstErr.msg);
       setError(firstErr.msg);
     }
   };
@@ -56,7 +71,35 @@ function Login() {
                 {errors.email && 'Please enter your password.'}
               </div>
             </div>
-
+            <div className="input-field">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="role"
+                  value="customer"
+                  defaultChecked
+                  ref={register()}
+                />
+                <label className="form-check-label">
+                  Are you logging as a customer ?
+                </label>
+              </div>
+              <div className="input-field">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="role"
+                    value="business"
+                    ref={register()}
+                  />
+                  <label className="form-check-label">
+                    Are you logging as a business ?
+                  </label>
+                </div>
+              </div>
+            </div>
             <button className="btn btn-success" type="submit">
               Login
             </button>

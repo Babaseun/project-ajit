@@ -22,10 +22,9 @@ productRouter.post('/api/products', productRules['forAddProduct'], Auth.verifyTo
   }
 );
 
-productRouter.get('/api/products', Auth.verifyToken, (req: Request, res: Response) => {
-    const { id } = res.locals.user;
+productRouter.get('/api/products', (req: Request, res: Response) => {
 
-    const products = productService.getAllProducts(id);
+    const products = productService.getAllProducts();
     return products.then((p) => res.status(200).send(p));
   }
 );

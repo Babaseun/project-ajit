@@ -23,14 +23,10 @@ const MainMap = () => {
   const history = useHistory();
 
   const returnImageUrls = async () => {
-    const config = {
-      headers: {
-        'x-access-token': localStorage.getItem('x-access-token'),
-      },
-    };
+
     const images = await axios.get('/api/images');
     const coords = await axios.get('/api/coords');
-    const products = await axios.get('/api/products', config);
+    const products = await axios.get('/api/products');
 
     Promise.all([images, coords, products]).then((res) => {
       const imgUrls = res[0].data;
@@ -68,7 +64,6 @@ const MainMap = () => {
       setImageData([...arrayOfData]);
     });
   };
-  console.log(imageData);
 
   const navMenuClicked = () => {
     navClicked ? setNavClicked(false) : setNavClicked(true);
@@ -97,7 +92,7 @@ const MainMap = () => {
   };
 
   const { isLoaded, loadError } = useLoadScript({
-     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
   if (loadError) return 'Error loading maps';
@@ -121,7 +116,7 @@ const MainMap = () => {
             center={center}
             options={options}
           >
-            {imageData &&
+            {Auth.getLoggedInStatus() &&
               imageData.map((marker) => (
                 <Marker
                   key={marker.id}
